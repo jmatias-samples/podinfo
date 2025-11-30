@@ -7,4 +7,4 @@ metadata:
     app.kubernetes.io/instance: dev
     app.kubernetes.io/component: ui-config
 data:
-  message: "Podinfo running in the dev overlay"
+  message: "Running from the Dev environment."

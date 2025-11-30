@@ -13,9 +13,9 @@ import (
 
 	"github.com/gomodule/redigo/redis"
 	"github.com/gorilla/mux"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	_ "github.com/jmatiascabrera/podinfo/pkg/api/http/docs"
 	"github.com/jmatiascabrera/podinfo/pkg/fscache"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	httpSwagger "github.com/swaggo/http-swagger"
 	"github.com/swaggo/swag"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
