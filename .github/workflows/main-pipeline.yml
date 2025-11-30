@@ -84,7 +84,6 @@ jobs:
   code_scan_quality:
     name: "Run code quality scan"
     runs-on: self-hosted-runner-docker
-    needs: [ unit_tests ]
     steps:
 
       - uses: actions/checkout@v4
@@ -101,7 +100,7 @@ jobs:
     name: "Deploy to DEV"
     runs-on: self-hosted-runner-docker
     environment: dev
-    needs: [ code_scan_quality, code_scan_security ]
+    needs: [ code_scan_quality, code_scan_security, unit_tests ]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
