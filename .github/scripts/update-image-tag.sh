@@ -34,7 +34,7 @@ fi
 
 new_image="${image_repo}:${new_tag}"
 
-sed -i "s#^\s*- .*#  - ${new_image}#" "$target_file"
+sed -i "s#^[[:space:]]*- .*#  - ${new_image}#" "$target_file"
 
 if git diff --quiet -- "$target_file"; then
   echo "No changes required for ${env_name}; file already references ${new_image}."
