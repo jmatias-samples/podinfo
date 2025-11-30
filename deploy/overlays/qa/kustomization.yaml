@@ -11,6 +11,6 @@ resources:
   - ui-config.yaml
 transformers:
   - labels.yaml
-patchesStrategicMerge:
-  - feature-flag-env.yaml
-  - frontend-replicas.yaml
+patches:
+  - path: feature-flag-env.yaml
+  - path: frontend-replicas.yaml
