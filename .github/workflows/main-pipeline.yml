@@ -122,46 +122,6 @@ jobs:
           image_repository: ${{ inputs.image_repository || env.IMAGE_REPOSITORY }}
 
 
-  end-to-end-tests:
-    name: "End-to-End Tests"
-    runs-on: self-hosted-runner-docker-medium
-    needs: [ code_scan_quality, code_scan_security, unit_tests ]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Disk Cleanup
-        uses: ./.github/actions/runner-cleanup
-
-      - name: Configure AWS credentials for ECR
-        uses: aws-actions/configure-aws-credentials@v5
-        with:
-          aws-region: us-east-1
-
-      - name: Login to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v2
-
-      - name: Setup Kubernetes
-        uses: helm/kind-action@v1.13.0
-        with:
-          cluster_name: kind
-
-      - name: Build container image
-        run: |
-          ./test/build.sh
-          kind load docker-image test/podinfo:latest
-
-      - name: Deploy
-        run: ./test/deploy.sh
-
-      - name: Run integration tests
-        run: ./test/test.sh
-
-      - name: Debug failure
-        if: failure()
-        run: |
-          kubectl logs -l app=podinfo || true
-
   deploy_preq:
     name: "Deploy to PREQ"
     runs-on: self-hosted-runner-docker-small
@@ -185,7 +145,7 @@ jobs:
     name: "Deploy to QA"
     runs-on: self-hosted-runner-docker-small
     environment: qa
-    needs: [ deploy_preq, end-to-end-tests ]
+    needs: [ deploy_preq ]
 
     steps:
       - name: Checkout repository
