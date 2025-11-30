@@ -72,6 +72,13 @@ jobs:
           version: v${{ env.KUBERNETES_VERSION }}
       - name: Setup kubeconform
         uses: ./.github/actions/kubeconform
+
+      - name: Install make on Ubuntu/Debian
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends make
+
       - name: Run unit tests
         run: make test
       - name: Validate Kustomize overlay
