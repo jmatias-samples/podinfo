@@ -32,6 +32,7 @@ runs:
       shell: bash
       run: |
         ./.github/scripts/update-image-tag.sh "${{ inputs.environment }}" "${{ inputs.image_tag }}" "${{ inputs.image_repository }}"
+        ./.github/scripts/update-version-go.sh "${{ inputs.image_tag }}"
 
     - name: Commit and push promotion
       shell: bash
