@@ -33,9 +33,7 @@ jobs:
 
   unit_tests:
     name: "Run unit tests"
-    runs-on:
-     - self-hosted-runner-docker
-     - medium
+    runs-on: self-hosted-runner-docker-medium
     steps:
 
       - uses: actions/checkout@v6
@@ -75,9 +73,7 @@ jobs:
 
   code_scan_security:
     name: "Run code security scan"
-    runs-on:
-     - self-hosted-runner-docker
-     - small
+    runs-on: self-hosted-runner-docker-small
     steps:
 
       - uses: actions/checkout@v6
@@ -91,9 +87,7 @@ jobs:
 
   code_scan_quality:
     name: "Run code quality scan"
-    runs-on:
-     - self-hosted-runner-docker
-     - small
+    runs-on: self-hosted-runner-docker-small
     steps:
 
       - uses: actions/checkout@v6
@@ -108,9 +102,7 @@ jobs:
 
   deploy_dev:
     name: "Deploy to DEV"
-    runs-on:
-     - self-hosted-runner-docker
-     - small
+    runs-on: self-hosted-runner-docker-small
     environment: dev
     needs: [ code_scan_quality, code_scan_security, unit_tests ]
     steps:
@@ -155,9 +147,7 @@ jobs:
 
   deploy_preq:
     name: "Deploy to PREQ"
-    runs-on:
-     - self-hosted-runner-docker
-     - small
+    runs-on: self-hosted-runner-docker-small
     environment: preq
     needs: [ deploy_dev ]
 
@@ -176,9 +166,7 @@ jobs:
 
   deploy_qa:
     name: "Deploy to QA"
-    runs-on:
-     - self-hosted-runner-docker
-     - small
+    runs-on: self-hosted-runner-docker-small
     environment: qa
     needs: [ deploy_preq, end-to-end-tests ]
 
@@ -198,9 +186,7 @@ jobs:
 
   deploy_prod:
     name: "Deploy to PROD"
-    runs-on:
-     - self-hosted-runner-docker
-     - small
+    runs-on: self-hosted-runner-docker-small
     environment: prod
     needs: [ deploy_qa ]
 
