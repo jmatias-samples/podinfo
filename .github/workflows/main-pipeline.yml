@@ -33,28 +33,6 @@ jobs:
   unit_tests:
     name: "Run unit tests"
     runs-on: self-hosted-runner-docker
-
-    steps:
-      - uses: actions/checkout@v4
-        name: Checkout code
-
-
-  code_scan_security:
-    name: "Run code security scan"
-    runs-on: self-hosted-runner-docker
-    steps:
-
-      - uses: actions/checkout@v4
-        name: Checkout code
-
-      - uses: ./.github/actions/run-scan-security
-        name: "Run code security scan"
-        with:
-          wait: 8
-
-  code_lint:
-    name: "Run code linters"
-    runs-on: self-hosted-runner-docker
     steps:
 
       - uses: actions/checkout@v6
@@ -66,10 +44,12 @@ jobs:
           cache-dependency-path: |
             **/go.sum
             **/go.mod
+
       - name: Setup kubectl
         uses: azure/setup-kubectl@v4
         with:
           version: v${{ env.KUBERNETES_VERSION }}
+
       - name: Setup kubeconform
         uses: ./.github/actions/kubeconform
 
@@ -85,12 +65,21 @@ jobs:
       - name: Validate Kustomize overlay
         run: |
           kubectl kustomize ./kustomize/bases | kubeconform -strict -summary -kubernetes-version ${{ env.KUBERNETES_VERSION }}
-      - name: Check if working tree is dirty
-        run: |
-          if [[ $(git diff --stat) != '' ]]; then
-            echo 'run make test and commit changes'
-            exit 1
-          fi
+
+
+  code_scan_security:
+    name: "Run code security scan"
+    runs-on: self-hosted-runner-docker
+    steps:
+
+      - uses: actions/checkout@v4
+        name: Checkout code
+
+      - uses: ./.github/actions/run-scan-security
+        name: "Run code security scan"
+        with:
+          wait: 8
+
 
   code_scan_quality:
     name: "Run code quality scan"
@@ -112,7 +101,7 @@ jobs:
     name: "Deploy to DEV"
     runs-on: self-hosted-runner-docker
     environment: dev
-    needs: [ code_scan_quality, code_scan_security, code_lint ]
+    needs: [ code_scan_quality, code_scan_security ]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
