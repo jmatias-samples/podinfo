@@ -25,6 +25,16 @@ jobs:
           cache-dependency-path: |
             **/go.sum
             **/go.mod
+
+      - name: Cache Go build outputs
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
       - name: Setup kubectl
         uses: azure/setup-kubectl@v4
         with:
