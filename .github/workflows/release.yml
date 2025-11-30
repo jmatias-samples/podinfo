@@ -28,7 +28,7 @@ jobs:
       - uses: ./.github/actions/runner-cleanup
 
       - name: Configure AWS credentials for ECR
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v5
         with:
           aws-region: us-east-1
 
