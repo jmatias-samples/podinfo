@@ -107,7 +107,7 @@ jobs:
     name: "Deploy to DEV"
     runs-on: self-hosted-runner-docker-small
     environment: dev
-    needs: [ code_scan_quality, code_scan_security, unit_tests,  build-docker-image ]
+    needs: [ code_scan_quality, code_scan_security, unit_tests, build-docker-image ]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -118,15 +118,15 @@ jobs:
         uses: ./.github/actions/promote-environment
         with:
           environment: dev
-          image_tag: ${{ inputs.image_tag }}
-          image_repository: ${{ inputs.image_repository || env.IMAGE_REPOSITORY }}
+          image_tag: ${{ needs.build-docker-image.outputs.image_tag }}
+          image_repository: ${{ needs.build-docker-image.outputs.image_repository }}
 
 
   deploy_preq:
     name: "Deploy to PREQ"
     runs-on: self-hosted-runner-docker-small
     environment: preq
-    needs: [ deploy_dev ]
+    needs: [ deploy_dev, build-docker-image ]
 
     steps:
       - name: Checkout repository
@@ -138,14 +138,14 @@ jobs:
         uses: ./.github/actions/promote-environment
         with:
           environment: preq
-          image_tag: ${{ inputs.image_tag }}
-          image_repository: ${{ inputs.image_repository || env.IMAGE_REPOSITORY }}
+          image_tag: ${{ needs.build-docker-image.outputs.image_tag }}
+          image_repository: ${{ needs.build-docker-image.outputs.image_repository }}
 
   deploy_qa:
     name: "Deploy to QA"
     runs-on: self-hosted-runner-docker-small
     environment: qa
-    needs: [ deploy_preq ]
+    needs: [ deploy_preq, build-docker-image ]
 
     steps:
       - name: Checkout repository
@@ -157,15 +157,15 @@ jobs:
         uses: ./.github/actions/promote-environment
         with:
           environment: qa
-          image_tag: ${{ inputs.image_tag }}
-          image_repository: ${{ inputs.image_repository || env.IMAGE_REPOSITORY }}
+          image_tag: ${{ needs.build-docker-image.outputs.image_tag }}
+          image_repository: ${{ needs.build-docker-image.outputs.image_repository }}
 
 
   deploy_prod:
     name: "Deploy to PROD"
     runs-on: self-hosted-runner-docker-small
     environment: prod
-    needs: [ deploy_qa ]
+    needs: [ deploy_qa, build-docker-image ]
 
     steps:
       - name: Checkout repository
@@ -177,5 +177,5 @@ jobs:
         uses: ./.github/actions/promote-environment
         with:
           environment: prod
-          image_tag: ${{ inputs.image_tag }}
-          image_repository: ${{ inputs.image_repository || env.IMAGE_REPOSITORY }}
+          image_tag: ${{ needs.build-docker-image.outputs.image_tag }}
+          image_repository: ${{ needs.build-docker-image.outputs.image_repository }}
