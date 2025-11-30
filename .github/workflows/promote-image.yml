@@ -1,0 +1,131 @@
+name: Promote container image
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        required: true
+        description: "Container image tag to promote"
+      image_repository:
+        required: false
+        description: "Full image repository (without tag)"
+        default: "745892955196.dkr.ecr.us-east-1.amazonaws.com/javier/podinfo"
+
+permissions:
+  contents: write
+
+jobs:
+  promote_dev:
+    name: Promote to dev
+    runs-on: self-hosted-runner-docker
+    environment: dev
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Sync main
+        run: |
+          git checkout main
+          git pull --ff-only origin main
+      - name: Update image tag for dev
+        run: |
+          ./.github/scripts/update-image-tag.sh dev "${{ inputs.image_tag }}" "${{ inputs.image_repository }}"
+      - name: Commit and push dev promotion
+        run: |
+          if git diff --quiet; then
+            echo "No changes to commit for dev"
+            exit 0
+          fi
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git commit -am "chore: promote image ${{ inputs.image_tag }} to dev"
+          git push origin HEAD:main
+
+  promote_preq:
+    name: Promote to preq
+    runs-on: self-hosted-runner-docker
+    environment: preq
+    needs: promote_dev
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Sync main
+        run: |
+          git checkout main
+          git pull --ff-only origin main
+      - name: Update image tag for preq
+        run: |
+          ./.github/scripts/update-image-tag.sh preq "${{ inputs.image_tag }}" "${{ inputs.image_repository }}"
+      - name: Commit and push preq promotion
+        run: |
+          if git diff --quiet; then
+            echo "No changes to commit for preq"
+            exit 0
+          fi
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git commit -am "chore: promote image ${{ inputs.image_tag }} to preq"
+          git push origin HEAD:main
+
+  promote_qa:
+    name: Promote to qa
+    runs-on: self-hosted-runner-docker
+    environment: qa
+    needs: promote_preq
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Sync main
+        run: |
+          git checkout main
+          git pull --ff-only origin main
+      - name: Update image tag for qa
+        run: |
+          ./.github/scripts/update-image-tag.sh qa "${{ inputs.image_tag }}" "${{ inputs.image_repository }}"
+      - name: Commit and push qa promotion
+        run: |
+          if git diff --quiet; then
+            echo "No changes to commit for qa"
+            exit 0
+          fi
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git commit -am "chore: promote image ${{ inputs.image_tag }} to qa"
+          git push origin HEAD:main
+
+  promote_prod:
+    name: Promote to production
+    runs-on: self-hosted-runner-docker
+    environment: prod
+    needs: promote_qa
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Sync main
+        run: |
+          git checkout main
+          git pull --ff-only origin main
+      - name: Update image tag for production
+        run: |
+          ./.github/scripts/update-image-tag.sh production "${{ inputs.image_tag }}" "${{ inputs.image_repository }}"
+      - name: Commit and push production promotion
+        run: |
+          if git diff --quiet; then
+            echo "No changes to commit for production"
+            exit 0
+          fi
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git commit -am "chore: promote image ${{ inputs.image_tag }} to production"
+          git push origin HEAD:main
