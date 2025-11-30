@@ -4,7 +4,7 @@ metadata:
   name: podinfo-ui-config
   labels:
     app.kubernetes.io/name: podinfo
-    app.kubernetes.io/instance: production
+    app.kubernetes.io/instance: prod
     app.kubernetes.io/component: ui-config
 data:
-  message: "Running from the Production environment."
+  message: "Running from the prod environment."

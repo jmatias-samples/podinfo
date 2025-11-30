@@ -16,8 +16,8 @@ case "$env_name" in
     file_suffix="$env_name"
     ;;
   prod|production)
-    overlay_dir="production"
-    file_suffix="production"
+    overlay_dir="prod"
+    file_suffix="prod"
     ;;
   *)
     echo "Unsupported environment: $env_name" >&2

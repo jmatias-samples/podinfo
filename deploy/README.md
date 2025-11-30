@@ -26,10 +26,10 @@ Deploy the demo in the `preq` namespace:
 kustomize build ./overlays/preq | kubectl apply -f-
 ```
 
-Deploy the demo in the `production` namespace:
+Deploy the demo in the `prod` namespace:
 
 ```bash
-kustomize build ./overlays/production | kubectl apply -f-
+kustomize build ./overlays/prod | kubectl apply -f-
 ```
 
 ## Testing Locally Using Kind

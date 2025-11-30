@@ -119,4 +119,13 @@ argocd app create podinfo \
 argocd app sync podinfo
 ```
 
+### Controlled, sequential promotions
+
+If you want to avoid Argo CD Image Updater automatically pushing a freshly built image to every environment, disable Image Updater on the ApplicationSet and let the GitHub Actions workflow handle promotions instead:
+
+1. Remove (or comment out) the `argocd-image-updater.argoproj.io/*` annotations from the `podinfo-applications` ApplicationSet in the `infra/app-of-apps/templates/podinfo.yaml` repository so Image Updater no longer writes image tags back to Git.
+2. Push your new image to ECR as usual.
+3. Manually trigger the `Promote container image` workflow in this repository and provide the image tag (and optional repository override). The workflow will update the pinned tags in `deploy/overlays/{dev,preq,qa,prod}/.argocd-source-podinfo-*.yaml`, committing each promotion in order.
+4. Because Argo CD still has automated sync enabled on the generated Applications, each commit from the workflow will roll out to the corresponding cluster namespace, one environment at a time, instead of every environment at once.
+
 With automated sync enabled, Argo CD will upgrade the deployment whenever the manifests in this repository change. For multi-environment setups, point separate Argo CD Applications at the overlays under `kustomize/overlays/`.

@@ -102,7 +102,7 @@ jobs:
           git push origin HEAD:main
 
   promote_prod:
-    name: Promote to production
+    name: Promote to prod
     runs-on: self-hosted-runner-docker
     environment: prod
     needs: promote_qa
@@ -116,16 +116,16 @@ jobs:
         run: |
           git checkout main
           git pull --ff-only origin main
-      - name: Update image tag for production
+      - name: Update image tag for prod
         run: |
-          ./.github/scripts/update-image-tag.sh production "${{ inputs.image_tag }}" "${{ inputs.image_repository }}"
-      - name: Commit and push production promotion
+          ./.github/scripts/update-image-tag.sh prod "${{ inputs.image_tag }}" "${{ inputs.image_repository }}"
+      - name: Commit and push prod promotion
         run: |
           if git diff --quiet; then
-            echo "No changes to commit for production"
+            echo "No changes to commit for prod"
             exit 0
           fi
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
-          git commit -am "chore: promote image ${{ inputs.image_tag }} to production"
+          git commit -am "chore: promote image ${{ inputs.image_tag }} to prod"
           git push origin HEAD:main
