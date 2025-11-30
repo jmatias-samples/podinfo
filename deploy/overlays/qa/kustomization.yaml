@@ -2,9 +2,9 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: qa
 resources:
-  - ../../bases/backend
+#  - ../../bases/backend
   - ../../bases/frontend
-  - ../../bases/cache
+#  - ../../bases/cache
   - namespace.yaml
   - ingress.yaml
   - feature-flags.yaml
@@ -12,5 +12,5 @@ resources:
 transformers:
   - labels.yaml
 patches:
-  - path: feature-flag-env.yaml
+#  - path: feature-flag-env.yaml
   - path: frontend-replicas.yaml
