@@ -17,7 +17,7 @@ jobs:
 
   unit_tests:
     name: "Run unit tests"
-    runs-on: self-hosted-runner-docker-medium
+    runs-on: self-hosted-runner-medium
     steps:
 
       - uses: actions/checkout@v6
@@ -60,7 +60,7 @@ jobs:
 
   code_scan_security:
     name: "Run code security scan"
-    runs-on: self-hosted-runner-docker-medium
+    runs-on: self-hosted-runner-medium
     steps:
 
       - uses: actions/checkout@v6
@@ -74,7 +74,7 @@ jobs:
 
   code_scan_quality:
     name: "Run code quality scan"
-    runs-on: self-hosted-runner-docker-small
+    runs-on: self-hosted-runner-small
     steps:
 
       - uses: actions/checkout@v6
@@ -87,7 +87,7 @@ jobs:
 
   build-docker-image:
     name: "Build and push Docker image"
-    runs-on: self-hosted-runner-docker-medium
+    runs-on: self-hosted-runner-medium
     outputs:
       image_tag: ${{ steps.build.outputs.image_tag }}
       image_repository: ${{ steps.build.outputs.image_repository }}
@@ -105,7 +105,7 @@ jobs:
 
   deploy_dev:
     name: "Deploy to DEV"
-    runs-on: self-hosted-runner-docker-small
+    runs-on: self-hosted-runner-small
     environment: dev
     needs: [ code_scan_quality, code_scan_security, unit_tests, build-docker-image ]
     steps:
@@ -124,7 +124,7 @@ jobs:
 
   deploy_preq:
     name: "Deploy to PREQ"
-    runs-on: self-hosted-runner-docker-small
+    runs-on: self-hosted-runner-small
     environment: preq
     needs: [ deploy_dev, build-docker-image ]
 
@@ -143,7 +143,7 @@ jobs:
 
   deploy_qa:
     name: "Deploy to QA"
-    runs-on: self-hosted-runner-docker-small
+    runs-on: self-hosted-runner-small
     environment: qa
     needs: [ deploy_preq, build-docker-image ]
 
@@ -163,7 +163,7 @@ jobs:
 
   deploy_prod:
     name: "Deploy to PROD"
-    runs-on: self-hosted-runner-docker-small
+    runs-on: self-hosted-runner-small
     environment: prod
     needs: [ deploy_qa, build-docker-image ]
 
