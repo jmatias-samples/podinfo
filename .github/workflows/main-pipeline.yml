@@ -87,7 +87,7 @@ jobs:
 
   build-docker-image:
     name: "Build and push Docker image"
-    runs-on: self-hosted-runner-medium
+    runs-on: self-hosted-runner-large
     outputs:
       image_tag: ${{ steps.build.outputs.image_tag }}
       image_repository: ${{ steps.build.outputs.image_repository }}
