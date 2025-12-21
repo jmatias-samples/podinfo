@@ -8,10 +8,8 @@ resources:
 #  - ../../bases/cache
   - namespace.yaml
   - ingress.yaml
-  - feature-flags.yaml
   - ui-config.yaml
 transformers:
   - labels.yaml
 patches:
-#  - path: feature-flag-env.yaml
   - path: frontend-replicas.yaml

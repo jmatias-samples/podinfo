@@ -43,5 +43,5 @@ runs:
         fi
         git config user.name "${{ inputs.git_user_name }}"
         git config user.email "${{ inputs.git_user_email }}"
-        git commit -am "chore: promote image ${{ inputs.image_tag }} to ${{ inputs.environment }}"
+        git commit -am "CHORE: promote image ${{ inputs.image_tag }} to ${{ inputs.environment }}"
         git push origin HEAD:main
