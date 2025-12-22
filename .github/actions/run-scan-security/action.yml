@@ -10,8 +10,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v6
-    - uses: ./.github/actions/runner-cleanup
+
     - run: |
         echo "Running security scan in ${{inputs.environment}}..."
         echo "Press F to pay respects..."
