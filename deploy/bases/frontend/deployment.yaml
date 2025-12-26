@@ -21,6 +21,7 @@ spec:
       labels:
         app: frontend
     spec:
+      automountServiceAccountToken: false
       containers:
       - name: frontend
         image: 745892955196.dkr.ecr.us-east-1.amazonaws.com/javier/podinfo:6.10.0
@@ -76,3 +77,4 @@ spec:
           requests:
             cpu: 50m
             memory: 16Mi
+            ephemeral-storage: "2Gi"
