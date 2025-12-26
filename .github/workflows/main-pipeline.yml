@@ -92,6 +92,13 @@ jobs:
           role-to-assume: arn:aws:iam::745892955196:role/github-actions
           aws-region: us-east-1
 
+      - name: Setup JFrog CLI
+        uses: jfrog/setup-jfrog-cli@v4
+        env:
+          JF_URL: ${{ vars.JF_URL }}
+        with:
+          oidc-provider-name: ${{ github.repository }}@github
+
       - name: Build and publish images
         id: build
         uses: ./.github/actions/build-docker-image
