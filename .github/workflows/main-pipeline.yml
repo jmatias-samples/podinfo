@@ -110,7 +110,7 @@ jobs:
         uses: actions/attest-build-provenance@v3
         with:
           subject-name: ${{ env.IMAGE_REPOSITORY }}
-          subject-digest: ${{ steps.build-push.outputs.digest }}
+          subject-digest: ${{ steps.build.outputs.digest }}
 
       - name: Publish Build info to JFrog
         env:
