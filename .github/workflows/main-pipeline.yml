@@ -17,7 +17,7 @@ jobs:
 
   unit_tests:
     name: "Run unit tests"
-    runs-on: self-hosted-runner-medium
+    runs-on: ubuntu-latest
 
     steps:
 
@@ -44,7 +44,7 @@ jobs:
 
   code_scan_security:
     name: "Run code security scan"
-    runs-on: self-hosted-runner-small
+    runs-on: ubuntu-latest
 
     steps:
 
@@ -59,7 +59,7 @@ jobs:
 
   code_scan_quality:
     name: "Run code quality scan"
-    runs-on: self-hosted-runner-small
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v6
@@ -89,7 +89,7 @@ jobs:
 
   deploy_dev:
     name: "Deploy to DEV"
-    runs-on: self-hosted-runner-small
+    runs-on: ubuntu-latest
     environment: dev
     needs: [ code_scan_quality, code_scan_security, unit_tests, build-docker-image ]
 
@@ -107,7 +107,7 @@ jobs:
 
   deploy_preq:
     name: "Deploy to PREQ"
-    runs-on: self-hosted-runner-small
+    runs-on: ubuntu-latest
     environment: preq
     needs: [ deploy_dev, build-docker-image ]
 
@@ -124,7 +124,7 @@ jobs:
 
   deploy_qa:
     name: "Deploy to QA"
-    runs-on: self-hosted-runner-small
+    runs-on: ubuntu-latest
     environment: qa
     needs: [ deploy_preq, build-docker-image ]
 
@@ -142,7 +142,7 @@ jobs:
 
   deploy_prod:
     name: "Deploy to PROD"
-    runs-on: self-hosted-runner-small
+    runs-on: ubuntu-latest
     environment: prod
     needs: [ deploy_qa, build-docker-image ]
 
