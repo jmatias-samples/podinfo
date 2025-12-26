@@ -2,7 +2,7 @@
 set -euo pipefail
 
 if [[ $# -lt 2 ]]; then
-  echo "Usage: $0 <environment> <tag> [image_repo]sd" >&2
+  echo "Usage: $0 <environment> <tag> [image_repo]" >&2
   exit 1
 fi
 

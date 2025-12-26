@@ -33,7 +33,7 @@ fmt:
 	go fmt ./...
 
 build-container:
-docker build -t $(DOCKER_IMAGE_NAME):$(VERSION) .
+	docker build -t $(DOCKER_IMAGE_NAME):$(VERSION) .
 
 build-xx:
 	docker buildx build \

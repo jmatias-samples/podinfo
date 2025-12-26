@@ -34,7 +34,7 @@ runs:
     - name: Login to Amazon ECR
       uses: aws-actions/amazon-ecr-login@v2
 
-    - name: Prepare
+    - name: Get version from tag
       id: prep
       shell: bash
       run: |
@@ -61,7 +61,20 @@ runs:
           type=raw,value=${{ steps.prep.outputs.VERSION }}
           type=raw,value=latest
 
-    - name: Publish multi-arch image
+    - name: Publish base image
+      uses: docker/build-push-action@v6
+      with:
+        push: true
+        builder: ${{ steps.buildx.outputs.name }}
+        context: .
+        platforms: linux/amd64
+        file: ./Dockerfile.base
+        tags: ${{ inputs.image_repository }}-base:latest
+        cache-from: type=gha,scope=release-base
+        cache-to: type=gha,scope=release-base,mode=max
+
+
+    - name: Publish docker image
       uses: docker/build-push-action@v6
       with:
         sbom: true
@@ -77,15 +90,3 @@ runs:
         labels: ${{ steps.meta.outputs.labels }}
         cache-from: type=gha,scope=release-multiarch
         cache-to: type=gha,scope=release-multiarch,mode=max
-
-    - name: Publish base image
-      uses: docker/build-push-action@v6
-      with:
-        push: true
-        builder: ${{ steps.buildx.outputs.name }}
-        context: .
-        platforms: linux/amd64
-        file: ./Dockerfile.base
-        tags: ${{ inputs.image_repository }}-base:latest
-        cache-from: type=gha,scope=release-base
-        cache-to: type=gha,scope=release-base,mode=max
