@@ -91,13 +91,6 @@ runs:
         cache-from: type=gha,scope=release-multiarch
         cache-to: type=gha,scope=release-multiarch,mode=max
 
-    - name: Setup JFrog CLI
-      uses: jfrog/setup-jfrog-cli@v4
-      env:
-        JF_URL: ${{ vars.JF_URL }}
-      with:
-        oidc-provider-name: ${{ github.repository }}@github
-
     - name: Capture image digest
       id: image-digest
       env:
