@@ -93,12 +93,6 @@ jobs:
           role-to-assume: arn:aws:iam::745892955196:role/github-actions
           aws-region: us-east-1
 
-      - name: Setup JFrog CLI (OIDC)
-        uses: jfrog/setup-jfrog-cli@v4
-        env:
-          JF_URL: ${{ vars.JF_URL }}
-        with:
-          oidc-provider-name: ${{ github.repository }}@github
 
       - name: Build and publish images
         id: build
@@ -112,21 +106,6 @@ jobs:
           subject-name: ${{ env.IMAGE_REPOSITORY }}
           subject-digest: ${{ steps.build.outputs.digest }}
 
-      - name: Publish Build info to JFrog
-        env:
-          JFROG_CLI_BUILD_NAME: podinfo
-          # JFrog organization secret
-          JFROG_CLI_BUILD_NUMBER: ${{ github.run_number }}
-        shell: bash
-        run: |
-          # Collect environment variables for the build
-          jf rt build-collect-env
-
-          # Collect VCS details from git and add them to the build
-          jf rt build-add-git
-
-          # Publish build info
-          jf rt build-publish
 
 
   deploy_dev:
