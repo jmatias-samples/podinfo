@@ -1,9 +1,5 @@
 # podinfo
 
-[![e2e](https://github.com/jmatiascabrera/podinfo/workflows/e2e/badge.svg)](https://github.com/jmatiascabrera/podinfo/blob/master/.github/workflows/e2e.yml)
-[![test](https://github.com/jmatiascabrera/podinfo/workflows/test/badge.svg)](https://github.com/jmatiascabrera/podinfo/blob/master/.github/workflows/test.yml)
-[![cve-scan](https://github.com/jmatiascabrera/podinfo/workflows/cve-scan/badge.svg)](https://github.com/jmatiascabrera/podinfo/blob/master/.github/workflows/cve-scan.yml)
-[![Go Report Card](https://goreportcard.com/badge/github.com/jmatiascabrera/podinfo)](https://goreportcard.com/report/github.com/jmatiascabrera/podinfo)
 Podinfo is a tiny web application made with Go that showcases best practices of running microservices in Kubernetes.
 Podinfo is used by CNCF projects like [Flagger](https://github.com/fluxcd/flagger)
 for end-to-end testing and workshops.
